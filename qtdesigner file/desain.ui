@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>600</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>600</width>
+    <height>400</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>600</width>
+    <height>400</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>D_tech</string>
+  </property>
+  <property name="windowIcon">
+   <iconset theme="D_Tech" resource="Logo.qrc">
+    <normaloff>:/tes/logo.jpeg</normaloff>:/tes/logo.jpeg</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>581</width>
+      <height>341</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="1">
+      <widget class="QFrame" name="frame">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QListWidget" name="informatiionTab">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>261</width>
+          <height>301</height>
+         </rect>
+        </property>
+        <item>
+         <property name="text">
+          <string>Information</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>----</string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QListWidget" name="summaryTab">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>261</width>
+          <height>301</height>
+         </rect>
+        </property>
+        <item>
+         <property name="text">
+          <string>Summary</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>----</string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QListWidget" name="cpuTab">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>261</width>
+          <height>301</height>
+         </rect>
+        </property>
+        <item>
+         <property name="text">
+          <string>CPU</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>----</string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QListWidget" name="gpuTab">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>261</width>
+          <height>301</height>
+         </rect>
+        </property>
+        <item>
+         <property name="text">
+          <string>GPU</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>----</string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QListWidget" name="memoryUsageTab">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>261</width>
+          <height>301</height>
+         </rect>
+        </property>
+        <item>
+         <property name="text">
+          <string>Memori Usage</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>----</string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QListWidget" name="diskUsageTab">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>261</width>
+          <height>301</height>
+         </rect>
+        </property>
+        <item>
+         <property name="text">
+          <string>Disk Usage</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>----</string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QListWidget" name="informasiJaringanTab">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>261</width>
+          <height>301</height>
+         </rect>
+        </property>
+        <item>
+         <property name="text">
+          <string>Informasi Jaringan</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>----</string>
+         </property>
+        </item>
+       </widget>
+       <zorder>cpuTab</zorder>
+       <zorder>memoryUsageTab</zorder>
+       <zorder>informatiionTab</zorder>
+       <zorder>informasiJaringanTab</zorder>
+       <zorder>gpuTab</zorder>
+       <zorder>diskUsageTab</zorder>
+       <zorder>summaryTab</zorder>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <layout class="QVBoxLayout" name="verticalLayout_6">
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QLabel" name="logoAplikasi">
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;img src=&quot;:/tes/logo.jpeg&quot;/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="namaAplikasi">
+           <property name="text">
+            <string>D_Tech</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="summary">
+         <property name="text">
+          <string>Summary</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbInformasiSistem">
+         <property name="text">
+          <string>Informasi Sistem</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbInformasiCPU">
+         <property name="text">
+          <string>Informasi CPU</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbInformasiGPU">
+         <property name="text">
+          <string>Informasi GPU</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbMemoryUsage">
+         <property name="text">
+          <string>Memory Usage</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbDiskUsage">
+         <property name="text">
+          <string>Disk Usage</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbInformasiJaringan">
+         <property name="text">
+          <string>Informasi Jaringan</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>600</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuSettings">
+    <property name="title">
+     <string>Home</string>
+    </property>
+    <addaction name="actionSettings"/>
+    <addaction name="actionAbout"/>
+   </widget>
+   <addaction name="menuSettings"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Settings</string>
+   </property>
+   <property name="autoRepeat">
+    <bool>true</bool>
+   </property>
+   <property name="visible">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="Logo.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>pbInformasiSistem</sender>
+   <signal>clicked()</signal>
+   <receiver>informatiionTab</receiver>
+   <slot>raise()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>154</x>
+     <y>167</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>444</x>
+     <y>202</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>summary</sender>
+   <signal>clicked()</signal>
+   <receiver>summaryTab</receiver>
+   <slot>raise()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>154</x>
+     <y>147</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>444</x>
+     <y>202</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pbInformasiCPU</sender>
+   <signal>clicked()</signal>
+   <receiver>cpuTab</receiver>
+   <slot>raise()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>154</x>
+     <y>205</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>444</x>
+     <y>202</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pbInformasiGPU</sender>
+   <signal>clicked()</signal>
+   <receiver>gpuTab</receiver>
+   <slot>raise()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>154</x>
+     <y>234</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>444</x>
+     <y>202</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pbMemoryUsage</sender>
+   <signal>clicked()</signal>
+   <receiver>memoryUsageTab</receiver>
+   <slot>raise()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>154</x>
+     <y>263</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>444</x>
+     <y>202</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pbDiskUsage</sender>
+   <signal>clicked()</signal>
+   <receiver>diskUsageTab</receiver>
+   <slot>raise()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>154</x>
+     <y>292</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>444</x>
+     <y>202</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pbInformasiJaringan</sender>
+   <signal>clicked()</signal>
+   <receiver>informasiJaringanTab</receiver>
+   <slot>raise()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>154</x>
+     <y>321</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>444</x>
+     <y>202</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
