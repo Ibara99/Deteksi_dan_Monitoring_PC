@@ -1,4 +1,6 @@
-from PyQt5.QtWidgets import QApplication, QDialog, QMainWindow, QMessageBox
+from PyQt5.QtWidgets import QApplication, QDialog, QMainWindow, QMessageBox, \
+     QLabel
+from PyQt5.QtGui import QFont
 from uic import Ui_MainWindow
 
 class Window(QMainWindow, Ui_MainWindow):
@@ -8,9 +10,9 @@ class Window(QMainWindow, Ui_MainWindow):
         self.connectSignalsSlots()
 
     def connectSignalsSlots(self):
-        self.actionAbout.triggered.connect(self.about) #triger untuk menu
-        #self.pushButton.clicked.connect(self.about) #click untuk buton
-        
+        self.actionSettings.triggered.connect(self.about)  #fungsinya belum dibikin
+        self.actionAbout.triggered.connect(self.about) 
+
     def about(self):
         QMessageBox.about(
             self,
@@ -18,16 +20,14 @@ class Window(QMainWindow, Ui_MainWindow):
             "<p>Aplikasi untuk mengecek hardware danspesifikasi laptop</p>"
             "<p>- Juga bakal ada alert, mungkin.</p>"
         )
-
-#dialog setting
-from PyQt5.uic import loadUi
-class FindReplaceDialog(QDialog):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        loadUi("ui/find_replace.ui", self)
+    
+def except_hook(cls, exception, traceback):
+    "ini untuk debug traceback"
+    sys.__excepthook__(cls, exception, traceback)
     
 if __name__ == "__main__":
     import sys
+    sys.excepthook = except_hook #debug dipanggil di sini
     app = QApplication(sys.argv)
     win = Window()
     win.show()
