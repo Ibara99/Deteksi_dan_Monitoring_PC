@@ -1,7 +1,8 @@
-from PyQt5.QtWidgets import QApplication, QWidget, QDialog, QMainWindow, QMessageBox, \
-     QLabel
-from PyQt5.QtGui import QFont
+from PyQt5.QtWidgets import QApplication, QWidget, QDialog, QMainWindow, \
+     QMessageBox, QInputDialog
+from PyQt5 import QtCore
 from uic import Ui_MainWindow
+
 import psutil
 import platform
 from datetime import datetime
@@ -19,16 +20,23 @@ def get_size(bytes, suffix="B"):
         if bytes < factor:
             return f"{bytes:.2f}{unit}{suffix}"
         bytes /= factor
+def waktu_nyala():
+    boot_time_timestamp = psutil.boot_time() #get waktu nyala
+    bt = datetime.fromtimestamp(boot_time_timestamp) #ubah format ke datetime
+    lama = datetime.now() - bt #selisih waktu sekarang dan waktu nyala
+    return str(lama)
+    
 
 class Window(QMainWindow, Ui_MainWindow):   
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
         self.initUI()
+        self.batasSuhu = 30 #misal, ini nilai default nya ya..
 
     def initUI(self):
-        self.actionSettings.triggered.connect(self.about)  #fungsinya belum dibikin
-        self.actionAbout.triggered.connect(self.about)
+        self.actionSettings.triggered.connect(self.settingFunc)
+        self.actionAbout.triggered.connect(self.aboutFunc)
         
         self.systeminfo()
         self.summry()
@@ -38,39 +46,119 @@ class Window(QMainWindow, Ui_MainWindow):
         self.diskInfo()
         self.jrngInfo()
 
-    def about(self):
+        #ini untuk Refresh tiap menit
+        self.timer = QtCore.QTimer(self)
+        self.timer.timeout.connect(self.readListValues)
+        self.timer.start(1000) #1s == 1000 milisecond
+
+    def readListValues(self):
+        "Fungsi untuk timer. Bisa dimanfaatkan untuk cek suhu atau semcamnya. \
+        semacam scheduler"
+        print("")
+        uptime = waktu_nyala()
+        
+        item = self.summaryTab.item(10)
+        item.setText(uptime)
+
+        
+    def aboutFunc(self):
         QMessageBox.about(
             self,
             "About",
             "<p>Aplikasi untuk mengecek hardware dan spesifikasi laptop</p>"
             "<p>- Juga bakal ada alert, mungkin.</p>"
         )
+    def settingFunc(self):
+        suhuBaru, ok = QInputDialog.getInt(
+                        self, 'Setting Dialog',
+                        'Masukkan batas suhu untuk alert: ',
+                        self.batasSuhu)
+        if ok:
+            self.batasSuhu = suhuBaru
+    def closeEvent(self, event):
+        "fungsi untuk ditrigger ketika aplikasi di-close"
+        quit_msg = "Are you sure you want to exit the program?"
+        reply = QMessageBox.question(self, 'Message', 
+                         quit_msg, QMessageBox.Yes, QMessageBox.No)
+
+        if reply == QMessageBox.Yes:
+            self.timer.stop()
+            event.accept()
+        else:
+            event.ignore()
 
     def summry(self):
-        uname = platform.uname()
-        os = uname.system
-        dvname = uname.node
-        phycore = str(psutil.cpu_count(logical=False))
-        ttlcore = str(psutil.cpu_count(logical=True))
-        cpufreq = psutil.cpu_freq()
+        try:
+            uname = platform.uname()
+            os = uname.system
+            dvname = uname.node
+            phycore = str(psutil.cpu_count(logical=False))
+            ttlcore = str(psutil.cpu_count(logical=True))
+            cpufreq = psutil.cpu_freq()
+            gpus = GPUtil.getGPUs()
+            list_gpus = []
+            for gpu in gpus:
+                gpu_name = gpu.name
+                gpu_total_memory = f"{gpu.memoryTotal}MB"
+                list_gpus.append((
+                    gpu_name, gpu_total_memory
+                ))
+            svmem = psutil.virtual_memory()
+            partitions = psutil.disk_partitions()
+            uptime = waktu_nyala()
 
-        self.summaryTab.addItem("Operating Sistem: ")
-        self.summaryTab.addItem(os)
-        self.summaryTab.addItem(" ")
-        self.summaryTab.addItem("Nama Perangkat: ")
-        self.summaryTab.addItem(dvname)
-        self.summaryTab.addItem(" ")
-        self.summaryTab.addItem("=====[ CPU ]=====")
-        self.summaryTab.addItem(" ")
-        self.summaryTab.addItem("CPU Frequency: ")
-        self.summaryTab.addItem(f"{cpufreq.max:.2f}Mhz")
-        self.summaryTab.addItem(" ")
-        self.summaryTab.addItem("Physical cores: ")
-        self.summaryTab.addItem(phycore)
-        self.summaryTab.addItem(" ")
-        self.summaryTab.addItem("Total cores: ")
-        self.summaryTab.addItem(ttlcore)
-        self.summaryTab.addItem(" ")
+            self.summaryTab.addItem("Operating Sistem: ")
+            self.summaryTab.addItem(os)
+            self.summaryTab.addItem(" ")
+            self.summaryTab.addItem("Nama Perangkat: ")
+            self.summaryTab.addItem(dvname)
+            self.summaryTab.addItem(" ")
+            self.summaryTab.addItem("Lama Waktu PC Menyala: ")
+            self.summaryTab.addItem(uptime)
+            self.summaryTab.addItem(" ")
+            self.summaryTab.addItem("==========[ CPU ]==========")
+            self.summaryTab.addItem(" ")
+            self.summaryTab.addItem("CPU Frequency: ")
+            self.summaryTab.addItem(f"{cpufreq.max:.2f}Mhz")
+            self.summaryTab.addItem(" ")
+            self.summaryTab.addItem("Physical cores: ")
+            self.summaryTab.addItem(phycore)
+            self.summaryTab.addItem(" ")
+            self.summaryTab.addItem("Total cores: ")
+            self.summaryTab.addItem(ttlcore)
+            self.summaryTab.addItem(" ")
+            self.summaryTab.addItem("==========[ GPU ]==========")
+            self.summaryTab.addItem(" ")
+            self.summaryTab.addItem("GPU Name :")
+            self.summaryTab.addItem(gpu_name)
+            self.summaryTab.addItem(" ")
+            self.summaryTab.addItem("Total Memory :")
+            self.summaryTab.addItem(gpu_total_memory)
+            self.summaryTab.addItem(" ")
+            self.summaryTab.addItem("==========[ Memory ]==========")
+            self.summaryTab.addItem(" ")
+            self.summaryTab.addItem("Total Memory")
+            self.summaryTab.addItem(f"{get_size(svmem.total)}")
+            self.summaryTab.addItem(" ")
+            self.summaryTab.addItem("Free Memory")
+            self.summaryTab.addItem(f"{get_size(svmem.available)}")
+            self.summaryTab.addItem(" ")
+            self.summaryTab.addItem("==========[ Disk ]==========")
+            self.summaryTab.addItem(" ")
+            for partition in partitions:
+                self.summaryTab.addItem(f"  Disk: {partition.mountpoint}")
+                try:
+                    partition_usage = psutil.disk_usage(partition.mountpoint)
+                except PermissionError:
+                    # jika ada error, di-skip
+                    self.summaryTab.addItem("")
+                    continue
+                self.summaryTab.addItem(f"  Total Size: {get_size(partition_usage.total)}")
+                self.summaryTab.addItem("")
+        except:
+            print("Sepertinya GPU anda tidak terdeteksi")
+            pass
+        
         
     def systeminfo(self):
         uname = platform.uname()
@@ -100,18 +188,14 @@ class Window(QMainWindow, Ui_MainWindow):
         self.informatiionTab.addItem(proc)
 
     def cpuInfo(self):
-        phycore = str(psutil.cpu_count(logical=False))
-        ttlcore = str(psutil.cpu_count(logical=True))
-
+            
         cpufreq = psutil.cpu_freq()
-        
-        ttlcpuusg = str(psutil.cpu_percent())
 
         self.cpuTab.addItem("Physical cores : ")
-        self.cpuTab.addItem(phycore)
+        self.cpuTab.addItem(f"{psutil.cpu_count(logical=False)}")
         self.cpuTab.addItem(" ")
         self.cpuTab.addItem("Total cores : ")
-        self.cpuTab.addItem(ttlcore)
+        self.cpuTab.addItem(f"{psutil.cpu_count(logical=True)}")
         self.cpuTab.addItem(" ")
         self.cpuTab.addItem("Max Frequency : ")
         self.cpuTab.addItem(f"{cpufreq.max:.2f}Mhz")
@@ -132,7 +216,50 @@ class Window(QMainWindow, Ui_MainWindow):
         self.cpuTab.addItem(f"{psutil.cpu_percent()}%")       
         
     def gpuInfo(self):
-        pass
+        try:
+            gpus = GPUtil.getGPUs()
+            list_gpus = []
+            for gpu in gpus:
+                # name of GPU
+                gpu_name = gpu.name
+                # get % percentage of GPU usage of that GPU
+                gpu_load = f"{gpu.load*100}%"
+                # get free memory in MB format
+                gpu_free_memory = f"{gpu.memoryFree}MB"
+                # get used memory
+                gpu_used_memory = f"{gpu.memoryUsed}MB"
+                # get total memory
+                gpu_total_memory = f"{gpu.memoryTotal}MB"
+                # get GPU temperature in Celsius
+                gpu_temperature = f"{gpu.temperature} °C"
+                gpu_uuid = gpu.uuid
+                list_gpus.append((
+                    gpu_name, gpu_load, gpu_free_memory, gpu_used_memory,
+                    gpu_total_memory, gpu_temperature, gpu_uuid
+                ))
+
+            self.gpuTab.addItem("GPU Name :")
+            self.gpuTab.addItem(gpu_name)
+            self.gpuTab.addItem(" ")
+            self.gpuTab.addItem("Load :")
+            self.gpuTab.addItem(gpu_load)
+            self.gpuTab.addItem(" ")
+            self.gpuTab.addItem("Free Memory :")
+            self.gpuTab.addItem(gpu_free_memory)
+            self.gpuTab.addItem(" ")
+            self.gpuTab.addItem("Used Memory :")
+            self.gpuTab.addItem(gpu_used_memory)
+            self.gpuTab.addItem(" ")
+            self.gpuTab.addItem("Total Memory :")
+            self.gpuTab.addItem(gpu_total_memory)
+            self.gpuTab.addItem(" ")
+            self.gpuTab.addItem("Temperature :")
+            self.gpuTab.addItem(gpu_temperature)
+            self.gpuTab.addItem(" ")
+        except:
+            print("Sepertinya GPU anda tidak terdeteksi")
+            pass        
+        
 
     def mmrInfo(self):
         svmem = psutil.virtual_memory()
@@ -203,6 +330,7 @@ class Window(QMainWindow, Ui_MainWindow):
 def except_hook(cls, exception, traceback):
     "ini untuk debug traceback"
     sys.__excepthook__(cls, exception, traceback)
+    win.timer.stop()
     
 if __name__ == "__main__":
     import sys
@@ -211,3 +339,4 @@ if __name__ == "__main__":
     win = Window()
     win.show()
     sys.exit(app.exec())
+    
